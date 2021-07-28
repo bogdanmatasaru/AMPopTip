@@ -523,8 +523,8 @@ open class PopTip: UIView {
             swipeGestureRecognizer?.direction = swipeRemoveGestureDirection
         }
         if shouldDismissOnPanOutside && panGestureRecognizer == nil {
-            panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(PopTip.handleTap(_:)))
-            panGestureRecognizer?.cancelsTouchesInView = false
+            panGestureRecognizer = UIPanGestureRecognizer(target: self,
+                                                          action: #selector(PopTip.handleSwipeOutside(_:)))
         }
         
         if isApplicationInBackground == nil {
