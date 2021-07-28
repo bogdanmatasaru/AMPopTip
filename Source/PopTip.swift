@@ -525,7 +525,6 @@ open class PopTip: UIView {
         if shouldDismissOnPanOutside && panGestureRecognizer == nil {
             panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(PopTip.handleTap(_:)))
             panGestureRecognizer?.cancelsTouchesInView = false
-            self.addGestureRecognizer(panGestureRecognizer!)
         }
         
         if isApplicationInBackground == nil {
@@ -731,6 +730,10 @@ open class PopTip: UIView {
             containerView?.removeGestureRecognizer(gestureRecognizer)
         }
         
+        if let gestureRecognizer = panGestureRecognizer {
+            containerView?.removeGestureRecognizer(gestureRecognizer)
+        }
+        
         let completion = {
             self.hostingController?.willMove(toParent: nil)
             self.customView?.removeFromSuperview()
@@ -803,6 +806,9 @@ open class PopTip: UIView {
             }
             if let swipeGesture = self.swipeGestureRecognizer {
                 self.containerView?.addGestureRecognizer(swipeGesture)
+            }
+            if let panGesture = self.panGestureRecognizer {
+                self.containerView?.addGestureRecognizer(panGesture)
             }
             
             self.appearHandler?(self)
