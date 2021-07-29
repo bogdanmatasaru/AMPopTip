@@ -195,7 +195,7 @@ open class PopTip: UIView {
     /// A boolean value that determines whether to dismiss when swiping outside the poptip.
     @objc open dynamic var shouldDismissOnSwipeOutside = false
     /// A boolean value that determines whether to dismiss when swiping outside the poptip.
-    @objc open dynamic var shouldDismissOnPanOutside = false
+    @objc open dynamic var shouldDismissOnPanOutside = true
     /// A boolean value that determines if the action animation should start automatically when the poptip is shown
     @objc open dynamic var startActionAnimationOnShow = true
     /// A direction that determines what swipe direction to dismiss when swiping outside the poptip.
@@ -211,6 +211,8 @@ open class PopTip: UIView {
     open var tapOutsideHandler: ((PopTip) -> Void)?
     /// A block that will be fired when the user swipes outside the poptip.
     open var swipeOutsideHandler: ((PopTip) -> Void)?
+    /// A block that will be fired when the user pan outside the poptip.
+    open var panOutsideHandler: ((PopTip) -> Void)?
     /// A block that will be fired when the poptip appears.
     open var appearHandler: ((PopTip) -> Void)?
     /// A block that will be fired when the poptip is dismissed.
@@ -524,7 +526,8 @@ open class PopTip: UIView {
         }
         if shouldDismissOnPanOutside && panGestureRecognizer == nil {
             panGestureRecognizer = UIPanGestureRecognizer(target: self,
-                                                          action: #selector(PopTip.handleSwipeOutside(_:)))
+                                                          action: #selector(PopTip.handlePanOutside(_:)))
+            panGestureRecognizer?.delegate = self
         }
         
         if isApplicationInBackground == nil {
@@ -848,6 +851,13 @@ open class PopTip: UIView {
         swipeOutsideHandler?(self)
     }
     
+    @objc fileprivate func handlePanOutside(_ gesture: UIPanGestureRecognizer) {
+        if shouldDismissOnPanOutside {
+            hide()
+        }
+        panOutsideHandler?(self)
+    }
+    
     @objc fileprivate func handleApplicationActive() {
         isApplicationInBackground = false
     }
@@ -944,5 +954,11 @@ fileprivate extension UIEdgeInsets {
     
     var vertical: CGFloat {
         return self.top + self.bottom
+    }
+}
+
+extension PopTip: UIGestureRecognizerDelegate {
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
 }
