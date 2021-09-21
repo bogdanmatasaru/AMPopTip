@@ -673,7 +673,7 @@ open class PopTip: UIView {
         self.direction = direction
         containerView = view
         let controller = UIHostingController(rootView: rootView)
-        controller.view.backgroundColor = .clear
+        controller.view.backgroundColor = UIColor.clear
         controller.view.frame.size = controller.view.intrinsicContentSize
         maxWidth = controller.view.frame.size.width
         self.customView?.removeFromSuperview()
