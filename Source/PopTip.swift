@@ -661,29 +661,6 @@ open class PopTip: UIView {
     ///   - frame: The originating frame. The poptip's arrow will point to the center of this frame.
     ///   - parent: The controller that holds the view that will hold the poptip. Needed as SwiftUI views have to be embed in a child UIHostingController.
     ///   - duration: Optional time interval that determines when the poptip will self-dismiss.
-    @available(iOS 13.0, *)
-    open func show<V: View>(rootView: V, direction: PopTipDirection, in view: UIView, from frame: CGRect, parent: UIViewController, duration: TimeInterval? = nil) {
-        resetView()
-        
-        text = nil
-        attributedText = nil
-        self.direction = direction
-        containerView = view
-        let controller = UIHostingController(rootView: rootView)
-        controller.view.backgroundColor = UIColor.clear
-        controller.view.frame.size = controller.view.intrinsicContentSize
-        maxWidth = controller.view.frame.size.width
-        self.customView?.removeFromSuperview()
-        self.customView = controller.view
-        parent.addChild(controller)
-        addSubview(controller.view)
-        controller.didMove(toParent: parent)
-        controller.view.layoutIfNeeded()
-        from = frame
-        hostingController = controller
-        
-        show(duration: duration)
-    }
     
     /// Update the current text
     ///
